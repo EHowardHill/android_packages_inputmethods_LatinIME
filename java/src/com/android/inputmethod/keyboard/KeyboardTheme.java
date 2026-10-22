@@ -41,7 +41,11 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
     public static final int THEME_ID_LXX_DARK = 4;
     public static final int THEME_ID_AUTO_DARK = 5;
     public static final int THEME_ID_YOU = 6;
-    public static final int DEFAULT_THEME_ID = THEME_ID_AUTO_DARK;
+    // KitKat UI Project (13.1): the 4.4 Holo keyboard theme, ported from
+    // android-4.4.4_r1 LatinIME (themes-kitkat.xml). Default and only
+    // selectable theme on this ROM.
+    public static final int THEME_ID_KITKAT = 7;
+    public static final int DEFAULT_THEME_ID = THEME_ID_KITKAT;
 
     private static KeyboardTheme[] AVAILABLE_KEYBOARD_THEMES;
 
@@ -57,6 +61,8 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
                 Build.VERSION_CODES.Q),
         new KeyboardTheme(THEME_ID_YOU, "You", R.style.KeyboardTheme_You,
                 Build.VERSION_CODES.S_V2),
+        new KeyboardTheme(THEME_ID_KITKAT, "KitKat", R.style.KeyboardTheme_KitKat,
+                VERSION_CODES.BASE),
     };
 
     static {
@@ -160,13 +166,9 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
     static KeyboardTheme getKeyboardTheme(final Context context, final int sdkVersion) {
         int themeId = getSelectedKeyboardThemeId(context);
         if (THEME_ID_AUTO_DARK == themeId) {
-            Configuration cfg = context.getResources().getConfiguration();
-            int nightMode = cfg.uiMode & Configuration.UI_MODE_NIGHT_MASK;
-            if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
-                themeId = THEME_ID_LXX_DARK;
-            } else {
-                themeId = THEME_ID_LXX_LIGHT;
-            }
+            // KitKat UI Project (13.1): 4.4 shipped one theme - the Holo
+            // keyboard - regardless of day/night.
+            themeId = THEME_ID_KITKAT;
         }
         final KeyboardTheme[] availableThemeArray = getAvailableThemeArray(context);
         final KeyboardTheme theme = searchKeyboardThemeById(themeId, availableThemeArray);

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+** KitKat UI Project (Phase 13)
+**
+** The Android 4.4 KitKat Holo keyboard theme, ported from
+** android-4.4.4_r1 LatinIME (java/res/values/themes-klp.xml) onto the
+** modern engine. The donor's KLP/Holo style tree no longer exists
+** upstream; this file recreates it: the donor key/spacebar/popup
+** 9-patches, suggestion strip art, key preview bubble, colors, icon set
+** and geometry fractions, wired through the same theme attrs the modern
+** KeyboardTheme machinery consumes.
+**
+** Structural attrs that the donor did not have (key preview animators,
+** more-keys-for-action layout, emoji palettes) inherit from the LXX_Dark
+** styles so the modern emoji panel and action-key popups keep working
+** (hard constraint: modern IME behavior stays functional).
+*/
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Donor geometry (values/dimens.xml of android-4.4.4_r1 LatinIME). -->
+    <fraction name="kitkat_keyboard_top_padding_holo">2.335%p</fraction>
+    <fraction name="kitkat_keyboard_bottom_padding_holo">4.669%p</fraction>
+    <fraction name="kitkat_key_horizontal_gap_holo">1.739%p</fraction>
+    <fraction name="kitkat_key_bottom_gap_holo">6.127%p</fraction>
+    <dimen name="kitkat_key_preview_offset_holo">8.0dp</dimen>
+    <dimen name="kitkat_more_keys_keyboard_vertical_correction_holo">-26.4dp</dimen>
+    <!-- 13.4 root cause fix: the modern KeyboardView base style (themes-common)
+         sets NO key text size attrs (the modern themes define them per-theme,
+         e.g. themes-lxx). Without them, KeyVisualAttributes reads 0 ->
+         paint.setTextSize(0) -> on-key labels drawn at zero size (invisible),
+         while previews kept rendering (keyPreviewTextRatio IS in the base
+         style). These are the donor KeyboardView.KLP sizes (dimens.xml:
+         key_letter_ratio 55%, key_large_letter_ratio 65%, key_label_ratio
+         34%, key_large_label_ratio 40%, key_hint_letter_ratio 25%,
+         key_hint_label_ratio 44%, key_uppercase_letter_ratio 35%,
+         key_preview_text_ratio 82%). -->
+    <fraction name="kitkat_key_letter_ratio">55%</fraction>
+    <fraction name="kitkat_key_large_letter_ratio">65%</fraction>
+    <fraction name="kitkat_key_label_ratio">34%</fraction>
+    <fraction name="kitkat_key_hint_letter_ratio">25%</fraction>
+    <fraction name="kitkat_key_hint_label_ratio">44%</fraction>
+    <fraction name="kitkat_key_shifted_letter_hint_ratio">35%</fraction>
+    <fraction name="kitkat_key_preview_text_ratio">82%</fraction>
+
+    <!-- The theme entry consumed by KeyboardTheme.KEYBOARD_THEMES. -->
+    <style name="KeyboardTheme.KitKat" parent="KeyboardIcons.Holo">
+        <item name="inputViewStyle">@style/InputView.LXX</item>
+        <item name="keyboardStyle">@style/Keyboard.KitKat</item>
+        <item name="keyboardViewStyle">@style/KeyboardView.KitKat</item>
+        <item name="mainKeyboardViewStyle">@style/MainKeyboardView.KitKat</item>
+        <item name="emojiPalettesViewStyle">@style/EmojiPalettesView.LXX_Dark</item>
+        <item name="moreKeysKeyboardStyle">@style/MoreKeysKeyboard.KitKat</item>
+        <item name="moreKeysKeyboardViewStyle">@style/MoreKeysKeyboardView.KitKat</item>
+        <item name="moreKeysKeyboardViewForActionStyle">@style/MoreKeysKeyboardView.LXX_Dark.Action</item>
+        <item name="suggestionStripViewStyle">@style/SuggestionStripView.KitKat</item>
+        <item name="suggestionWordStyle">@style/SuggestionWord.KitKat</item>
+    </style>
+
+    <style name="Keyboard.KitKat" parent="Keyboard">
+        <!-- This should be aligned with KeyboardTheme.THEME_ID_KITKAT. -->
+        <item name="themeId">KitKat</item>
+        <item name="keyboardTopPadding">@fraction/kitkat_keyboard_top_padding_holo</item>
+        <item name="keyboardBottomPadding">@fraction/kitkat_keyboard_bottom_padding_holo</item>
+        <item name="horizontalGap">@fraction/kitkat_key_horizontal_gap_holo</item>
+        <item name="verticalGap">@fraction/kitkat_key_bottom_gap_holo</item>
+        <!-- touchPositionCorrectionData inherits the (already holo) array
+             from the Keyboard base style. -->
+    </style>
+
+    <!-- Donor KeyboardView.KLP. -->
+    <style name="KeyboardView.KitKat" parent="KeyboardView">
+        <item name="android:background">@drawable/keyboard_background_holo</item>
+        <item name="keyBackground">@drawable/btn_keyboard_key_klp</item>
+        <!-- 4.4 drew the spacebar with the normal key chrome (the modern
+             spacebarBackground attr has no donor counterpart). -->
+        <item name="spacebarBackground">@drawable/btn_keyboard_key_klp</item>
+        <item name="keyTypeface">bold</item>
+        <!-- 13.4 fix: keyTextColor/keyPreviewTextColor are consumed by
+             KeyVisualAttributes via TypedArray.getColor(), which cannot
+             resolve the donor's res/color/key_text_color_holo.xml SELECTOR
+             (it returns the 0 fallback = fully transparent -> key letters
+             never painted). The donor KeyboardView resolved the selector
+             per state (getColorStateList); the modern engine reads a flat
+             int. Point at the donor's per-state resolved values instead:
+             every non-functional donor state resolves to
+             key_text_color_normal_holo (white), which is also what 4.4
+             rendered on the letter keys. Functional/shifted states keep
+             their own flat colors below. -->
+        <item name="keyTextColor">@color/key_text_color_normal_holo</item>
+        <item name="keyTextInactivatedColor">@color/key_text_inactivated_color_holo</item>
+        <item name="keyHintLetterColor">@color/key_hint_letter_color_holo</item>
+        <item name="keyHintLabelColor">@color/key_hint_label_color_holo</item>
+        <item name="keyShiftedLetterHintInactivatedColor">@color/key_shifted_letter_hint_inactivated_color_holo</item>
+        <item name="keyShiftedLetterHintActivatedColor">@color/key_shifted_letter_hint_activated_color_holo</item>
+        <item name="keyTextShadowColor">@color/key_text_shadow_color_holo</item>
+        <item name="keyTextShadowRadius">0.0</item>
+        <!-- 13.4: key text SIZE attrs (see the dimens block above) - without
+             these the labels paint at size 0. Values are the donor's. -->
+        <item name="keyLetterSize">@fraction/kitkat_key_letter_ratio</item>
+        <item name="keyLargeLetterRatio">@fraction/kitkat_key_large_letter_ratio</item>
+        <item name="keyLabelSize">@fraction/kitkat_key_label_ratio</item>
+        <item name="keyHintLetterRatio">@fraction/kitkat_key_hint_letter_ratio</item>
+        <item name="keyHintLabelRatio">@fraction/kitkat_key_hint_label_ratio</item>
+        <item name="keyShiftedLetterHintRatio">@fraction/kitkat_key_shifted_letter_hint_ratio</item>
+        <item name="keyPreviewTextRatio">@fraction/kitkat_key_preview_text_ratio</item>
+    </style>
+
+    <style name="MainKeyboardView.KitKat" parent="KeyboardView.KitKat">
+        <!-- Key preview: donor keyboard_key_feedback_*_klp bubble 9-patches
+             (modern preview animators/heights kept; the modern engine has no
+             keyPreviewLayout attr, so the bubble rides keyPreviewBackground). -->
+        <item name="keyPreviewBackground">@drawable/keyboard_key_feedback_klp</item>
+        <!-- 13.4 fix: same flat-color rule as keyTextColor above. -->
+        <item name="keyPreviewTextColor">@color/key_text_color_normal_holo</item>
+        <item name="keyPreviewOffset">@dimen/kitkat_key_preview_offset_holo</item>
+        <item name="keyPreviewHeight">@dimen/config_key_preview_height_lxx</item>
+        <item name="keyPreviewShowUpAnimator">@anim/key_preview_show_up_lxx</item>
+        <item name="keyPreviewDismissAnimator">@anim/key_preview_dismiss_lxx</item>
+        <item name="gestureFloatingPreviewTextColor">@color/highlight_color_klp</item>
+        <item name="gestureFloatingPreviewColor">@color/gesture_floating_preview_color_holo</item>
+        <item name="gestureTrailColor">@color/highlight_color_klp</item>
+        <item name="slidingKeyInputPreviewColor">@color/highlight_translucent_color_klp</item>
+        <item name="languageOnSpacebarTextColor">@color/spacebar_text_color_holo</item>
+        <!-- A negative value to disable text shadow layer. -->
+        <item name="languageOnSpacebarTextShadowRadius">-1.0</item>
+    </style>
+
+    <style name="MoreKeysKeyboard.KitKat" parent="Keyboard.KitKat">
+        <item name="keyboardTopPadding">0%p</item>
+        <item name="keyboardBottomPadding">0%p</item>
+        <item name="horizontalGap">0%p</item>
+    </style>
+
+    <!-- Donor MoreKeysKeyboardView.KLP (popup key chrome). -->
+    <style name="MoreKeysKeyboardView.KitKat" parent="KeyboardView.KitKat">
+        <item name="android:background">@null</item>
+        <item name="keyBackground">@drawable/btn_keyboard_key_popup_klp</item>
+        <item name="keyTypeface">normal</item>
+        <item name="verticalCorrection">@dimen/kitkat_more_keys_keyboard_vertical_correction_holo</item>
+    </style>
+
+    <!-- Donor SuggestionStripView.KLP: dark glass strip, white/gray words,
+         holo-blue highlight for the auto-correct candidate. -->
+    <style name="SuggestionStripView.KitKat" parent="SuggestionStripView">
+        <item name="android:background">@drawable/keyboard_suggest_strip_holo</item>
+        <item name="suggestionStripOptions">autoCorrectBold|validTypedWordBold</item>
+        <item name="colorValidTypedWord">@color/typed_word_color_klp</item>
+        <item name="colorTypedWord">@color/typed_word_color_klp</item>
+        <item name="colorAutoCorrect">@color/highlight_color_klp</item>
+        <item name="colorSuggested">@color/suggested_word_color_klp</item>
+        <item name="alphaObsoleted">70%</item>
+    </style>
+
+    <style name="SuggestionWord.KitKat">
+        <item name="android:background">@drawable/btn_suggestion_klp</item>
+    </style>
+</resources>

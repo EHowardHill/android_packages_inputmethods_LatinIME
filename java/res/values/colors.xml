@@ -63,4 +63,22 @@
     <color name="setup_welcome_video_margin_color">#FFCCCCCC</color>
     <!-- Accent color for the notification. We need to match this to the OS build -->
     <color name="notification_accent_color">#FF607D8B</color>
+
+    <!-- KitKat UI Project (13.1): donor android-4.4.4_r1 LatinIME Holo/KLP
+         keyboard colors, ported for the KeyboardTheme.KitKat style. -->
+    <color name="key_text_color_normal_holo">@android:color/white</color>
+    <color name="key_text_color_functional_holo">@android:color/white</color>
+    <color name="key_text_inactivated_color_holo">#66E0E4E5</color>
+    <color name="key_hint_letter_color_holo">#80000000</color>
+    <color name="key_hint_label_color_holo">#A0FFFFFF</color>
+    <color name="key_shifted_letter_hint_inactivated_color_holo">#66E0E4E5</color>
+    <color name="key_shifted_letter_hint_activated_color_holo">@android:color/white</color>
+    <color name="key_text_shadow_color_holo">@android:color/transparent</color>
+    <color name="highlight_color_klp">#FFF0F0F0</color>
+    <color name="highlight_translucent_color_klp">#99E0E0E0</color>
+    <color name="gesture_floating_preview_color_holo">#C0000000</color>
+    <color name="spacebar_text_color_holo">#FFC0C0C0</color>
+    <color name="spacebar_text_shadow_color_holo">#80000000</color>
+    <color name="typed_word_color_klp">#D8F0F0F0</color>
+    <color name="suggested_word_color_klp">#B2F0F0F0</color>
 </resources>
