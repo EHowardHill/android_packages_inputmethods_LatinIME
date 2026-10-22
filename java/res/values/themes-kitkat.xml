@@ -90,6 +90,12 @@
              their own flat colors below. -->
         <item name="keyTextColor">@color/key_text_color_normal_holo</item>
         <item name="keyTextInactivatedColor">@color/key_text_inactivated_color_holo</item>
+        <!-- 20.1 fix: the ?123/ABC layout-switch keys carry
+             followFunctionalTextColor; without this attr they paint
+             transparent (blank toggle keys - same class of bug as 13.4).
+             Donor KeyboardView.KLP used the key text color for functional
+             labels; white matches every donor selector state. -->
+        <item name="functionalTextColor">@color/key_text_color_normal_holo</item>
         <item name="keyHintLetterColor">@color/key_hint_letter_color_holo</item>
         <item name="keyHintLabelColor">@color/key_hint_label_color_holo</item>
         <item name="keyShiftedLetterHintInactivatedColor">@color/key_shifted_letter_hint_inactivated_color_holo</item>
