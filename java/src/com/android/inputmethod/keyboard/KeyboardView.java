@@ -403,8 +403,13 @@ public class KeyboardView extends View {
 
             // Horizontal label text alignment
             if (key.isAlignLabelOffCenter()) {
-                // The label is placed off center of the key. Used mainly on "phone number" layout.
-                labelX = centerX + params.mLabelOffCenterRatio * labelCharWidth;
+                // KitKat UI P18.1: donor KeyboardView semantics - the label
+                // sits LEFT-OF-CENTER (centerX - reference char * 7/4), and
+                // the hint label draws just right of it (donor "phone number"
+                // layout: digit left, hint right). The modern off-center-ratio
+                // path drew both at the same x when the theme carried no
+                // ratios, overlapping digit and hint.
+                labelX = centerX - labelCharWidth * 7.0f / 4.0f;
                 paint.setTextAlign(Align.LEFT);
             } else {
                 labelX = centerX;
@@ -455,7 +460,9 @@ public class KeyboardView extends View {
             if (key.hasHintLabel()) {
                 // The hint label is placed just right of the key label. Used mainly on
                 // "phone number" layout.
-                hintX = labelX + params.mHintLabelOffCenterRatio * labelCharWidth;
+                // KitKat UI P18.1: donor semantics - two reference chars right of
+                // the label x (digit left-of-center, hint right of it).
+                hintX = labelX + labelCharWidth * 2.0f;
                 if (key.isAlignHintLabelToBottom(mDefaultKeyLabelFlags)) {
                     hintBaseline = labelBaseline;
                 } else {
